@@ -1,0 +1,48 @@
+<main
+  class="bg-[#ffefd2] min-h-screen flex items-center justify-center p-2 sm:p-4 font-mono overflow-auto"
+>
+  <div
+    class="w-full max-w-[1250px] min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] border-[1.6px] border-black rounded-t-[15px] sm:rounded-t-[20px] lg:rounded-t-[27px] mx-auto bg-[#fff3d9] flex flex-col"
+  >
+    <!-- Header Global -->
+    <header
+      class="px-2 sm:px-6 w-full h-[22px] sm:h-[35px] bg-[#ff6e1b] rounded-t-[13px] sm:rounded-t-[18px] lg:rounded-t-[25px] flex items-center justify-between border-b-[1.6px] border-black"
+    >
+      <h2 class="text-xs sm:text-lg italic font-extrabold">Collabwrite</h2>
+      <div
+        class="flex items-center justify-end gap-1 sm:gap-2 w-[60px] sm:w-[120px]"
+      >
+        <div class="w-2 h-2 sm:w-4 sm:h-4 grid place-items-center">
+          <svg viewBox="0 0 10 10" class="w-2 h-2 sm:w-4 sm:h-4 text-black">
+            <rect y="7" width="10" height="1" stroke-width="0.8" />
+          </svg>
+        </div>
+        <div class="w-2 h-2 sm:w-4 sm:h-4 grid place-items-center">
+          <svg viewBox="0 0 10 10" class="w-2 h-2 sm:w-4 sm:h-4 text-black">
+            <rect
+              x="1.5"
+              y="1.5"
+              width="7"
+              height="7"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+            />
+          </svg>
+        </div>
+        <div class="w-2 h-2 sm:w-4 sm:h-4 grid place-items-center">
+          <svg viewBox="0 0 10 10" class="w-2 h-2 sm:w-4 sm:h-4 text-black">
+            <path
+              d="M2 2 L8 8 M8 2 L2 8"
+              stroke="currentColor"
+              stroke-width="0.8"
+            />
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Specific Content -->
+    <router-outlet></router-outlet>
+  </div>
+</main>

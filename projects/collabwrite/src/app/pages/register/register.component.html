@@ -1,1 +1,73 @@
-<p>register works!</p>
+<div
+  class="flex flex-col lg:flex-row flex-1 border-t-0 border-black lg:divide-x-[1.6px] divide-black"
+>
+  <app-landing-page class="w-[56%]"></app-landing-page>
+  <!-- Formulário à direita -->
+  <section
+    class="w-full lg:w-[43%] p-4 sm:p-6 lg:p-10 flex flex-col justify-center items-center order-1 lg:order-2"
+  >
+    <h3 class="font-bold text-sm sm:text-lg pb-3 sm:pb-6 mb-3 sm:mb-6">
+      {{ login ? "Entrar" : "Crie sua conta" }}
+    </h3>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col w-full max-w-[400px] lg:max-w-[500px]"
+    >
+      <div
+        class="flex flex-col gap-4 sm:gap-8 lg:gap-10 w-full justify-center items-center"
+      >
+        @if (login === false) {
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="nome de usuário"
+            class="placeholder-black border h-10 sm:h-14 border-black w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[350px] px-2 sm:px-3 py-1 text-xs sm:text-sm outline-none bg-transparent"
+          />
+        }
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="seu melhor e-mail"
+          class="placeholder-black border h-10 sm:h-14 border-black w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[350px] px-2 sm:px-3 py-1 text-xs sm:text-sm outline-none bg-transparent"
+        />
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="senha"
+          class="placeholder-black border h-10 sm:h-14 border-black w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[350px] px-2 sm:px-3 py-1 text-xs sm:text-sm outline-none bg-transparent"
+        />
+      </div>
+
+      <span
+        class="flex justify-center sm:justify-end text-xs pr-0 sm:pr-8 lg:pr-14 mt-2"
+      >
+        {{ login ? "Não possui uma conta?" : "Já possui uma conta?" }} &nbsp;
+        <a
+          class="underline text-black/70 cursor-pointer"
+          (click)="setarLogin()"
+        >
+          {{ login ? "Cadastre-se" : "Entrar" }}
+        </a>
+      </span>
+
+      <div class="flex pt-6 sm:pt-10 lg:pt-12 justify-center">
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="bg-[#8fbf7f] border font-bold py-2 sm:py-4 lg:py-5 w-28 sm:w-36 lg:w-40 mt-2 hover:bg-[#7eac70] text-xs sm:text-base transition-colors disabled:opacity-70"
+        >
+          {{ loading ? "Carregando..." : "Continue" }}
+        </button>
+      </div>
+
+      <p *ngIf="successMessage" class="text-green-600 text-center mt-3">
+        {{ successMessage }}
+      </p>
+      <p *ngIf="errorMessage" class="text-red-600 text-center mt-3">
+        {{ errorMessage }}
+      </p>
+    </form>
+  </section>
+</div>

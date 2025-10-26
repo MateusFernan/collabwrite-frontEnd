@@ -1,0 +1,187 @@
+/* Estilos responsivos para o componente de login */
+
+/* Garantir que o layout seja responsivo em todas as telas */
+@media (max-width: 1024px) {
+  .lg\:flex-row {
+    flex-direction: column !important;
+  }
+
+  .lg\:w-\[57\%\],
+  .lg\:w-\[43\%\] {
+    width: 100% !important;
+  }
+}
+
+/* Ajustes para tablets */
+@media (max-width: 768px) {
+  /* Reduzir padding em telas menores */
+  .container-padding {
+    padding: 1rem !important;
+  }
+
+  /* Ajustar altura da imagem de fundo */
+  .bg-image {
+    height: 250px !important;
+    background-size: contain !important;
+  }
+
+  /* Formulário mais compacto */
+  .form-container {
+    padding: 1.5rem !important;
+  }
+}
+
+/* Ajustes para dispositivos móveis */
+@media (max-width: 640px) {
+  /* Container principal com menos padding */
+  main {
+    padding: 0.5rem !important;
+  }
+
+  /* Header mais compacto */
+  header {
+    height: 24px !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Título menor no mobile */
+  h2 {
+    font-size: 0.75rem !important;
+  }
+
+  /* Ícones menores no header */
+  .w-3,
+  .w-4 {
+    width: 0.6rem !important;
+    height: 0.6rem !important;
+  }
+
+  /* Inputs adaptados para mobile - menores */
+  input {
+    height: 40px !important;
+    font-size: 12px !important;
+    max-width: 240px !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Botão adaptado */
+  button {
+    width: 120px !important;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    font-size: 12px !important;
+  }
+
+  /* Texto menor em mobile */
+  p {
+    font-size: 10px !important;
+    max-width: 260px !important;
+  }
+
+  /* Título do formulário menor */
+  h3 {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 480px) {
+  /* Container ainda mais compacto */
+
+  /* Header ultra compacto */
+  header {
+    height: 22px !important;
+    padding-left: 0.4rem !important;
+    padding-right: 0.4rem !important;
+  }
+
+  /* Título ainda menor */
+  h2 {
+    font-size: 0.7rem !important;
+  }
+
+  /* Ícones ainda menores */
+  .w-3,
+  .w-4 {
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+  }
+
+  /* Remover dots decorativos em telas muito pequenas */
+  .absolute {
+    display: none !important;
+  }
+
+  /* Formulário ultra compacto */
+  .flex.flex-col.gap-6 {
+    gap: 0.8rem !important;
+  }
+
+  /* Inputs menores */
+  input {
+    max-width: 220px !important;
+    height: 36px !important;
+    font-size: 11px !important;
+    padding-left: 0.4rem !important;
+    padding-right: 0.4rem !important;
+  }
+
+  /* Botão menor */
+  button {
+    width: 110px !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    font-size: 11px !important;
+  }
+
+  /* Texto ainda menor */
+  p {
+    font-size: 9px !important;
+    max-width: 240px !important;
+  }
+
+  /* Título do formulário ainda menor */
+  h3 {
+    font-size: 0.8rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+}
+
+/* Transições suaves para melhor UX */
+input {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+input:focus {
+  border-color: #4a5568;
+  box-shadow: 0 0 0 2px rgba(74, 85, 104, 0.1);
+}
+
+button {
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+/* Garantir que imagens se ajustem corretamente */
+.bg-image {
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Melhorar acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
