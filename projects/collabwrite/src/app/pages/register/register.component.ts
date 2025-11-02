@@ -7,6 +7,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'app-register',
@@ -25,11 +26,12 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
+    private router: Router
   ) {
     this.form = this.fb.group({
       name: this.fb.nonNullable.control(
         '',
-        this.login ? [Validators.required] : [],
+        this.login ? [Validators.required] : []
       ),
       email: this.fb.nonNullable.control('', [
         Validators.required,
@@ -70,7 +72,9 @@ export class RegisterComponent {
           this.form.reset();
         },
         complete: () => {
+          console.log('aqui');
           this.loading = false;
+          this.router.navigate(['/documents']);
         },
         error: (err) => {
           this.errorMessage = err?.error?.message ?? 'Erro ao entrar';

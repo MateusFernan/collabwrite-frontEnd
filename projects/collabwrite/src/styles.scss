@@ -2,7 +2,4 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  @apply font-mono text-gray-900;
-}
+@import "quill/dist/quill.snow.css";

@@ -1,10 +1,9 @@
 <main
-  class="bg-[#ffefd2] min-h-screen flex items-center justify-center p-2 sm:p-4 font-mono overflow-auto"
+  class="bg-[#ffefd2] min-h-screen h-screen flex items-center justify-center p-2 sm:p-4 font-mono"
 >
   <div
-    class="w-full max-w-[1250px] min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] border-[1.6px] border-black rounded-t-[15px] sm:rounded-t-[20px] lg:rounded-t-[27px] mx-auto bg-[#fff3d9] flex flex-col"
+    class="w-full max-w-[1250px] h-full max-h-[698px] min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] border-[1.6px] border-black rounded-t-[15px] sm:rounded-t-[20px] lg:rounded-t-[27px] mx-auto bg-[#fff3d9] flex flex-col"
   >
-    <!-- Header Global -->
     <header
       class="px-2 sm:px-6 w-full h-[22px] sm:h-[35px] bg-[#ff6e1b] rounded-t-[13px] sm:rounded-t-[18px] lg:rounded-t-[25px] flex items-center justify-between border-b-[1.6px] border-black"
     >
@@ -42,7 +41,8 @@
       </div>
     </header>
 
-    <!-- Page Specific Content -->
-    <router-outlet></router-outlet>
+    <div class="flex-1 h-full min-h-0">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </main>

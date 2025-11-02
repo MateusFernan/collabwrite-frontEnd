@@ -1,1 +1,19 @@
-<p>editor works!</p>
+<div class="flex flex-col gap-3">
+  <div class="text-xs text-gray-600">
+    <span class="font-semibold">Documento #{{ docId }}</span>
+    <span *ngIf="saved" class="ml-2">• Salvo</span>
+    <span *ngIf="!saved" class="ml-2">• Salvando...</span>
+  </div>
+
+  <quill-editor
+    theme="snow"
+    name="content"
+    [(ngModel)]="html"
+    [modules]="modules"
+    (onEditorCreated)="onReady($event)"
+    (onContentChanged)="onChanged($event)"
+    [styles]="{ height: '460px' }"
+    placeholder="Escreva aqui..."
+    class="bg-white rounded-2xl p-2"
+  ></quill-editor>
+</div>
