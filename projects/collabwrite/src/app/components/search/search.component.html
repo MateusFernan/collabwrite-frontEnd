@@ -1,0 +1,15 @@
+<div class="relative w-full lg:max-w-[750px]">
+  <input
+    type="text"
+    placeholder="Pesquisar"
+    [(ngModel)]="textoParaPesquisar"
+    (input)="pesquisar()"
+    class="placeholder-black border h-10 sm:h-14 border-black w-full pl-3 pr-10 sm:pr-12 text-xs sm:text-sm outline-none bg-transparent"
+    aria-label="Pesquisar"
+  />
+  <img
+    [src]="'assets/LUPA.svg'"
+    alt=""
+    class="pointer-events-none absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5"
+  />
+</div>

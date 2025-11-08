@@ -1,1 +1,23 @@
-<p>explore works!</p>
+<section class="p-6 max-w-[80%] flex flex-col gap-20">
+  <app-search [arquivos]="arquivosPublicos"></app-search>
+  <div class="flex flex-wrap items-center gap-20 pl-2">
+    <div
+      *ngFor="let arquivo of arquivosFiltrados; index as i"
+      class="flex flex-col gap-5 w-32 items-center hover:cursor-pointer"
+      (mouseenter)="hover = i"
+      (mouseleave)="hover = null"
+    >
+      <img
+        (click)="abrirArquivo(arquivo.id)"
+        [src]="
+          hover === i ? 'assets/BIBLIOTECA.svg' : 'assets/ARQUIVO FECHADO.svg'
+        "
+        alt=""
+        class="h-16 w-auto transition-opacity duration-150"
+      />
+      <span class="text-base">
+        {{ arquivo.title }}
+      </span>
+    </div>
+  </div>
+</section>

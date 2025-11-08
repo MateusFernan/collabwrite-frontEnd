@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { NewDocResolver } from './core/resolvers/new-doc.resolver';
+import { logoutResolver } from './core/resolvers/logout.resolver';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'register', pathMatch: 'full' },
@@ -13,8 +14,17 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'logout',
+    loadComponent: () =>
+      import('./pages/register/register.component').then(
+        (m) => m.RegisterComponent
+      ),
+    resolve: { loggedOut: logoutResolver },
+    runGuardsAndResolvers: 'always',
+  },
+  {
     path: '',
-    component: LayoutComponent, // mantém seu <nav> fixo
+    component: LayoutComponent,
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'documents', pathMatch: 'full' },
@@ -38,6 +48,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/editor/editor.component').then(
             (m) => m.EditorComponent
+          ),
+      },
+      {
+        path: 'read/:id',
+        loadComponent: () =>
+          import('./pages/text-reader/text-reader.component').then(
+            (m) => m.TextReaderComponent
+          ),
+      },
+      {
+        path: 'explore',
+        loadComponent: () =>
+          import('./pages/explore/explore.component').then(
+            (m) => m.ExploreComponent
           ),
       },
     ],

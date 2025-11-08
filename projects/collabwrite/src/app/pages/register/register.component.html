@@ -18,12 +18,12 @@
         class="flex flex-col gap-4 sm:gap-8 lg:gap-10 w-full justify-center items-center"
       >
         @if (login === false) {
-          <input
-            type="text"
-            formControlName="name"
-            placeholder="nome de usuário"
-            class="placeholder-black border h-10 sm:h-14 border-black w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[350px] px-2 sm:px-3 py-1 text-xs sm:text-sm outline-none bg-transparent"
-          />
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="nome de usuário"
+          class="placeholder-black border h-10 sm:h-14 border-black w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[350px] px-2 sm:px-3 py-1 text-xs sm:text-sm outline-none bg-transparent"
+        />
         }
         <input
           type="email"
@@ -56,7 +56,7 @@
         <button
           type="submit"
           [disabled]="loading"
-          class="bg-[#8fbf7f] border font-bold py-2 sm:py-4 lg:py-5 w-28 sm:w-36 lg:w-40 mt-2 hover:bg-[#7eac70] text-xs sm:text-base transition-colors disabled:opacity-70"
+          class="bg-[#8fbf7f] border border-black px-4 py-2 shadow-[3px_3px_0_#000] transition-[box-shadow,transform] duration-200 ease-out hover:shadow-[6px_6px_0_#000] hover:-translate-y-[2px] active:translate-y-0 active:shadow-[2px_2px_0_#000] motion-reduce:transition-none motion-reduce:hover:transform-none font-bold sm:py-4 lg:py-5 w-28 sm:w-36 lg:w-40 mt-2 hover:bg-[#7eac70] text-xs sm:text-base disabled:opacity-70"
         >
           {{ loading ? "Carregando..." : "Continue" }}
         </button>

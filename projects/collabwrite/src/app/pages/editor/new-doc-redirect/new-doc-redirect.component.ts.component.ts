@@ -7,10 +7,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   template: `<div class="p-4 text-xs text-gray-500">Criando documento...</div>`,
 })
 export class NewDocRedirectComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private _route: ActivatedRoute, private _router: Router) {}
 
   ngOnInit(): void {
-    const doc = this.route.snapshot.data['doc'];
-    this.router.navigate(['/editor', doc.id], { replaceUrl: true });
+    const doc = this._route.snapshot.data['doc'];
+    this._router.navigate(['/editor', doc.id], { replaceUrl: true });
   }
 }

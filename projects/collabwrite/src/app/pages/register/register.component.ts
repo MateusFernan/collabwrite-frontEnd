@@ -24,27 +24,27 @@ export class RegisterComponent {
   form: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,
-    private router: Router
+    private _fb: FormBuilder,
+    private _auth: AuthService,
+    private _router: Router
   ) {
-    this.form = this.fb.group({
-      name: this.fb.nonNullable.control(
+    this.form = this._fb.group({
+      name: this._fb.nonNullable.control(
         '',
         this.login ? [Validators.required] : []
       ),
-      email: this.fb.nonNullable.control('', [
+      email: this._fb.nonNullable.control('', [
         Validators.required,
         Validators.email,
       ]),
-      password: this.fb.nonNullable.control('', [
+      password: this._fb.nonNullable.control('', [
         Validators.required,
         Validators.minLength(6),
       ]),
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.form.invalid || this.loading) return;
     this.loading = true;
     this.successMessage = '';
@@ -52,7 +52,7 @@ export class RegisterComponent {
 
     const { name, email, password } = this.form.getRawValue();
     if (!this.login) {
-      this.auth.register(name, email, password).subscribe({
+      this._auth.register(name, email, password).subscribe({
         next: () => {
           this.successMessage = 'Conta criada com sucesso!';
           this.form.reset();
@@ -66,7 +66,7 @@ export class RegisterComponent {
         },
       });
     } else {
-      this.auth.login(email, password).subscribe({
+      this._auth.login(email, password).subscribe({
         next: () => {
           this.successMessage = 'Sucesso';
           this.form.reset();
@@ -74,7 +74,7 @@ export class RegisterComponent {
         complete: () => {
           console.log('aqui');
           this.loading = false;
-          this.router.navigate(['/documents']);
+          this._router.navigate(['/documents']);
         },
         error: (err) => {
           this.errorMessage = err?.error?.message ?? 'Erro ao entrar';
@@ -84,7 +84,7 @@ export class RegisterComponent {
     }
   }
 
-  setarLogin() {
+  setarLogin(): void {
     this.login = !this.login;
   }
 }

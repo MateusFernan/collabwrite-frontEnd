@@ -1,35 +1,25 @@
 <section class="p-6 max-w-[80%] flex flex-col gap-20">
-  <div class="relative w-full lg:max-w-[750px]">
-    <input
-      type="text"
-      formControlName="pesquisar"
-      placeholder="Pesquisar"
-      class="placeholder-black border h-10 sm:h-14 border-black w-full pl-3 pr-10 sm:pr-12 text-xs sm:text-sm outline-none bg-transparent"
-      aria-label="Pesquisar"
-    />
-    <img
-      [src]="'assets/LUPA.svg'"
-      alt=""
-      class="pointer-events-none absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5"
-    />
-  </div>
+  <app-search [arquivos]="arquivos"></app-search>
   <div class="flex flex-wrap items-center gap-20 pl-2">
     <div
-      *ngFor="let arquivo of arquivos; index as i"
-      class="flex flex-col gap-5 w-32 items-center"
+      *ngFor="let arquivo of arquivosFiltrados; index as i"
+      class="flex flex-col gap-5 w-32 items-center hover:cursor-pointer"
       (mouseenter)="hover = i"
       (mouseleave)="hover = null"
+      (click)="i == 0 ? criarTexto() : null"
     >
       <img
-        [routerLink]="['/editor/new']"
+        (click)="i !== 0 ? abrirArquivo(arquivo.id) : null"
         [src]="
-          hover === i && i !== 0 ? 'assets/BIBLIOTECA.svg' : arquivo.linkSVG
+          hover === i && i !== 0
+            ? 'assets/BIBLIOTECA.svg'
+            : 'assets/ARQUIVO FECHADO.svg'
         "
         alt=""
         class="h-16 w-auto transition-opacity duration-150"
       />
       <span class="text-base">
-        {{ arquivo.labelImagem }} <span *ngIf="i !== 0">{{ i }}</span>
+        {{ arquivo.title }}
       </span>
     </div>
   </div>

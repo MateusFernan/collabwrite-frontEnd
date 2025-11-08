@@ -11,19 +11,19 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly api = environment.apiUrl + '/auth';
+  private readonly _api = environment.apiUrl + '/auth';
   private readonly _user = signal<User | null>(null);
 
   user = this._user.asReadonly();
 
-  constructor(private http: HttpClient) {
+  constructor(private _http: HttpClient) {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
 
     if (savedToken && savedUser) {
       this._user.set(JSON.parse(savedUser));
     } else if (savedToken) {
-      this.http.get<User>(`${this.api}/me`).subscribe({
+      this._http.get<User>(`${this._api}/me`).subscribe({
         next: (user) => {
           localStorage.setItem('user', JSON.stringify(user));
           this._user.set(user);
@@ -33,7 +33,7 @@ export class AuthService {
     }
   }
 
-  hydrateFromStorage() {
+  hydrateFromStorage(): void {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
 
@@ -42,35 +42,35 @@ export class AuthService {
       return;
     }
     if (savedToken) {
-      this.http.get<User>(`${this.api}/me`).subscribe({
+      this._http.get<User>(`${this._api}/me`).subscribe({
         next: (user) => {
           localStorage.setItem('user', JSON.stringify(user));
           this._user.set(user);
         },
-        error: () => this.clearSession(),
+        error: () => this._clearSession(),
       });
     }
   }
 
   login(email: string, password: string) {
-    return this.http
+    return this._http
       .post<{
         token: string;
         user: User;
-      }>(`${this.api}/login`, { email, password })
-      .pipe(tap(({ token, user }) => this.setSession(token, user)));
+      }>(`${this._api}/login`, { email, password })
+      .pipe(tap(({ token, user }) => this._setSession(token, user)));
   }
 
   register(name: string, email: string, password: string) {
     console.log(name, email, password);
-    return this.http.post<User>(`${this.api}/register`, {
+    return this._http.post<User>(`${this._api}/register`, {
       name,
       email,
       password,
     });
   }
-  logout() {
-    this.clearSession();
+  logout(): void {
+    this._clearSession();
   }
 
   getToken() {
@@ -81,13 +81,13 @@ export class AuthService {
     return !!this._user();
   }
 
-  private setSession(token: string, user: User) {
+  private _setSession(token: string, user: User): void {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
     this._user.set(user);
   }
 
-  private clearSession() {
+  private _clearSession(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this._user.set(null);

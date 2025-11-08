@@ -1,0 +1,14 @@
+<div class="w-full h-full overflow-auto p-6">
+  <h1 class="text-center text-2xl font-extrabold mb-6">{{ title }}</h1>
+
+  <ngx-typed-js
+    [strings]="[html]"
+    [typeSpeed]="0"
+    [showCursor]="true"
+    [cursorChar]="'▌'"
+    [loop]="false"
+    [contentType]="'html'"
+  >
+    <div class="typing break-words whitespace-pre-line"></div>
+  </ngx-typed-js>
+</div>

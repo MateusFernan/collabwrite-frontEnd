@@ -1,10 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { DocumentsService } from '../../core/services/documents.service';
+import { DocumentDto } from '../../models/documents.dto';
+import { SearchComponent } from '../../components/search/search.component';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-explore',
   standalone: true,
-  imports: [],
+  imports: [SearchComponent, RouterModule, CommonModule],
   templateUrl: './explore.component.html',
   styleUrl: './explore.component.scss',
 })
-export class ExploreComponent {}
+export class ExploreComponent implements OnInit {
+  constructor(
+    private _documentService: DocumentsService,
+    private _router: Router
+  ) {}
+  arquivosPublicos: DocumentDto[] = [];
+  hover: number | null = null;
+
+  ngOnInit(): void {
+    this._documentService.getPublicFiles().subscribe((response) => {
+      DocumentsService.arquivosFiltrados = response;
+      this.arquivosPublicos = response;
+    });
+  }
+
+  abrirArquivo(id: number): void {
+    this._router.navigate([`/read/${id}`]);
+  }
+
+  get arquivosFiltrados(): DocumentDto[] {
+    return DocumentsService.arquivosFiltrados;
+  }
+}

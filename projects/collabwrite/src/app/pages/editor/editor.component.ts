@@ -10,6 +10,11 @@ import {
   map,
   distinctUntilChanged,
   takeUntil,
+  switchMap,
+  tap,
+  catchError,
+  of,
+  skip,
 } from 'rxjs';
 import { DocumentDto } from '../../models/documents.dto';
 
@@ -21,13 +26,18 @@ import { DocumentDto } from '../../models/documents.dto';
   styleUrl: './editor.component.scss',
 })
 export class EditorComponent implements OnInit, OnDestroy {
-  docId!: number;
+  private _docId!: number;
+  title: string = '';
   html = '';
-  quill!: any;
+  private _quill!: any;
   saved = true;
+  private _deltaProps: unknown;
+  initialized = false;
+  isPublic = false;
 
-  private destroy$ = new Subject<void>();
-  private save$ = new Subject<{ delta: unknown; html: string }>();
+  private _destroy$ = new Subject<void>();
+  private _save$ = new Subject<{ delta: unknown; html: string }>();
+  private _visibilitySave$ = new Subject<'PUBLIC' | 'PRIVATE'>();
 
   modules = {
     toolbar: [
@@ -40,46 +50,80 @@ export class EditorComponent implements OnInit, OnDestroy {
     ],
   };
 
-  constructor(private route: ActivatedRoute, private docs: DocumentsService) {
-    this.save$
+  constructor(private _route: ActivatedRoute, private _docs: DocumentsService) {}
+
+  ngOnInit(): void {
+    this._updateVisibility();
+    this._updateContent();
+    this._docId = Number(this._route.snapshot.paramMap.get('id'));
+    this._docs.getById(this._docId).subscribe((doc: DocumentDto) => {
+      this.html = doc.contentHtml ?? '';
+      this.title = doc.title;
+      this._deltaProps = doc.contentDelta;
+      setTimeout(() => {
+        if (doc.contentDelta && this._quill) {
+          this._quill.setContents(doc.contentDelta);
+        }
+        this.initialized = true;
+      }, 0);
+      this.isPublic = doc.visibility === 'PUBLIC';
+    });
+  }
+
+  private _updateVisibility(): void {
+    this._visibilitySave$
+      .pipe(
+        debounceTime(300),
+        tap(() => (this.saved = false)),
+        switchMap((v) =>
+          this._docs
+            .updateDocument(this._docId, { visibility: v })
+            .pipe(catchError(() => of(null)))
+        )
+      )
+      .subscribe(() => (this.saved = true));
+  }
+
+  private _updateContent(): void {
+    this._save$
       .pipe(
         debounceTime(700),
         map((p) => JSON.stringify(p)),
         distinctUntilChanged(),
-        map((s) => JSON.parse(s)),
-        takeUntil(this.destroy$)
+        map((s) => JSON.parse(s) as { delta: unknown; html: string }),
+        tap(() => (this.saved = false)),
+        switchMap(({ delta, html }) =>
+          this._docs
+            .patchContent(this._docId, delta, html)
+            .pipe(catchError(() => of(null)))
+        ),
+        takeUntil(this._destroy$)
       )
-      .subscribe(({ delta, html }) => {
-        this.saved = false;
-        this.docs.patchContent(this.docId, delta, html).subscribe({
-          next: () => (this.saved = true),
-          error: () => (this.saved = true),
-        });
+      .subscribe(() => {
+        this.saved = true;
       });
   }
 
-  ngOnInit(): void {
-    this.docId = Number(this.route.snapshot.paramMap.get('id'));
-    this.docs.getById(this.docId).subscribe((doc: DocumentDto) => {
-      this.html = doc.contentHtml ?? '';
-      setTimeout(() => {
-        if (doc.contentDelta && this.quill)
-          this.quill.setContents(doc.contentDelta);
-      }, 0);
-    });
+  onReady(q: any): void {
+    this._quill = q;
   }
 
-  onReady(q: any) {
-    this.quill = q;
+  toggleVisibility(): void {
+    this.isPublic = !this.isPublic;
+    const v = this.isPublic ? 'PUBLIC' : 'PRIVATE';
+    this._visibilitySave$.next(v);
   }
-  onChanged(e: any) {
-    const delta = this.quill?.getContents();
+
+  onChanged(e: any): void {
+    if (!this.initialized) return;
+    const delta = this._quill?.getContents();
     const html = e.html || '';
-    this.save$.next({ delta, html });
+    this._save$.next({ delta, html });
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+    this.initialized = false;
   }
 }

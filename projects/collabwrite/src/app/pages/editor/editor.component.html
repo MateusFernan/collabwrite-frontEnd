@@ -1,8 +1,29 @@
 <div class="flex flex-col gap-3">
-  <div class="text-xs text-gray-600">
-    <span class="font-semibold">Documento #{{ docId }}</span>
-    <span *ngIf="saved" class="ml-2">• Salvo</span>
-    <span *ngIf="!saved" class="ml-2">• Salvando...</span>
+  <div class="text-xs text-gray-600 flex flex-row items-center gap-4">
+    <span class="font-semibold">{{ title }}</span>
+    <span *ngIf="saved">• Salvo</span>
+    <span *ngIf="!saved">• Salvando...</span>
+    <button
+      type="button"
+      role="switch"
+      [attr.aria-checked]="isPublic"
+      (click)="toggleVisibility()"
+      class="relative inline-flex h-5 w-9 items-center rounded-full border border-black transition [box-shadow:3px_3px_0_#000] bg-[#ffeccd]"
+      [class.bg-[#c8ffd2]]="isPublic"
+    >
+      <span
+        class="inline-block h-4 w-4 translate-x-0 rounded-full bg-white border border-black transition will-change-transform"
+        [class.translate-x-4]="isPublic"
+      ></span>
+    </button>
+
+    <span
+      class="text-[11px]"
+      [class.text-green-700]="isPublic"
+      [class.text-gray-500]="!isPublic"
+    >
+      {{ isPublic ? "PÚBLICO" : "PRIVADO" }}
+    </span>
   </div>
 
   <quill-editor
@@ -12,7 +33,7 @@
     [modules]="modules"
     (onEditorCreated)="onReady($event)"
     (onContentChanged)="onChanged($event)"
-    [styles]="{ height: '460px' }"
+    [styles]="{ height: '500px' }"
     placeholder="Escreva aqui..."
     class="bg-white rounded-2xl p-2"
   ></quill-editor>

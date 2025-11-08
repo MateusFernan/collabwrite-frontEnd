@@ -1,0 +1,14 @@
+.caret {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background: currentColor;
+  margin-left: 2px;
+  vertical-align: -0.1em;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

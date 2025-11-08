@@ -3,26 +3,73 @@
     class="flex w-[10%] h-full flex-col border-r-[1.6px] border-black divide-black"
   >
     <div class="flex flex-col justify-between my-8 items-center h-full">
-      <div class="flex flex-col items-center gap-8">
-        <div
-          *ngFor="let img of imagensSidebar | slice: 0 : 2"
-          class="flex flex-col items-center"
+      <div class="flex flex-col items-center gap-8 w-full">
+        <a
+          *ngFor="let img of imagensSidebar | slice : 0 : 2"
+          class="relative flex w-full flex-col items-center px-2 py-4 hover:bg-gray-100 transition-colors duration-200"
+          [routerLink]="img.route"
+          routerLinkActive
+          [routerLinkActiveOptions]="{ exact: true }"
+          #rla="routerLinkActive"
         >
           <img [src]="img.linkSVG" class="w-[28%] h-auto mb-2" />
-          <span class="text-xs font-bold break-all">{{ img.labelImagem }}</span>
-        </div>
+          <span
+            class="text-xs font-bold break-all"
+            [class.font-extrabold]="rla.isActive"
+            >{{ img.labelImagem }}</span
+          >
+
+          <span
+            class="absolute right-0 top-0 h-full w-[3px] bg-black rounded-l transform transition-all duration-300 ease-out"
+            [class.opacity-0]="!rla.isActive"
+            [class.translate-x-1]="!rla.isActive"
+            [class.opacity-100]="rla.isActive"
+            [class.translate-x-0]="rla.isActive"
+            aria-hidden="true"
+          ></span>
+        </a>
       </div>
 
       <div class="h-12 sm:h-16"></div>
 
-      <div class="flex flex-col items-center gap-8">
-        <div
-          *ngFor="let img of imagensSidebar | slice: 2"
-          class="flex flex-col items-center"
-        >
-          <img [src]="img.linkSVG" class="w-[28%] h-auto mb-2" />
-          <span class="text-xs font-bold">{{ img.labelImagem }}</span>
-        </div>
+      <div class="flex flex-col items-center gap-8 w-full">
+        <ng-container *ngFor="let img of imagensSidebar | slice : 2">
+          <a
+            *ngIf="img.route; else btnAcao"
+            class="relative flex w-full flex-col items-center px-2 py-4 hover:bg-gray-100 transition-colors duration-200"
+            [routerLink]="img.route"
+            routerLinkActive
+            [routerLinkActiveOptions]="{ exact: true }"
+            #rla2="routerLinkActive"
+          >
+            <img [src]="img.linkSVG" class="w-[28%] h-auto mb-2" />
+            <span
+              class="text-xs font-bold"
+              [class.font-extrabold]="rla2.isActive"
+              >{{ img.labelImagem }}</span
+            >
+
+            <span
+              class="absolute right-0 top-0 h-full w-[3px] bg-black rounded-l transform transition-all duration-300 ease-out"
+              [class.opacity-0]="!rla2.isActive"
+              [class.translate-x-1]="!rla2.isActive"
+              [class.opacity-100]="rla2.isActive"
+              [class.translate-x-0]="rla2.isActive"
+              aria-hidden="true"
+            ></span>
+          </a>
+
+          <ng-template #btnAcao>
+            <button
+              type="button"
+              (click)="img.action?.()"
+              class="relative flex w-full flex-col items-center px-2 py-4 hover:bg-gray-100 transition-colors duration-200"
+            >
+              <img [src]="img.linkSVG" class="w-[28%] h-auto mb-2" />
+              <span class="text-xs font-bold">{{ img.labelImagem }}</span>
+            </button>
+          </ng-template>
+        </ng-container>
       </div>
     </div>
   </nav>

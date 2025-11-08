@@ -1,0 +1,41 @@
+<div class="w-[420px]">
+  <div class="h-11 bg-[#118A3C] border-b-[1.6px] border-black relative">
+    <button
+      aria-label="Fechar"
+      (click)="close()"
+      class="absolute right-3 top-1/2 -translate-y-1/2 text-black/90 hover:rotate-90 transition-transform"
+    >
+      ✕
+    </button>
+  </div>
+
+  <div class="px-7 py-6 font-mono text-black">
+    <h2 class="text-xl font-bold text-center mb-5">Nome do Arquivo:</h2>
+
+    <input
+      class="w-full h-12 bg-[#ffeccd] border-[1.6px] border-black px-3 outline-none"
+      [formControl]="title"
+      placeholder="nome de usuário"
+      (keydown.enter)="confirm()"
+      autofocus
+    />
+
+    <div class="mt-7 flex gap-4 justify-center">
+      <button
+        class="min-w-32 h-10 border-[1.6px] border-black bg-[#f5b77f] font-bold shadowsApp active:translate-x-[1px] active:translate-y-[1px]"
+        [class.opacity-50]="title.invalid"
+        [disabled]="title.invalid"
+        (click)="confirm()"
+      >
+        OK
+      </button>
+
+      <button
+        class="min-w-32 h-10 border-[1.6px] border-black bg-[#f5b77f] font-bold shadowsApp active:translate-x-[1px] active:translate-y-[1px]"
+        (click)="close()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
