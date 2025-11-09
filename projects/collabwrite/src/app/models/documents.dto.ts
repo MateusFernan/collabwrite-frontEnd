@@ -6,6 +6,7 @@ export interface DocumentDto {
   contentHtml?: string;
   createdAt: string;
   updatedAt: string;
+  src?: string;
   author?: { id: number; name: string };
 }
 

@@ -12,8 +12,10 @@
         (click)="i !== 0 ? abrirArquivo(arquivo.id) : null"
         [src]="
           hover === i && i !== 0
-            ? 'assets/ARQUIVO FECHADO.svg'
-            : 'assets/CRIAR.svg'
+            ? 'assets/BIBLIOTECA.svg'
+            : arquivo.src
+            ? arquivo.src
+            : 'assets/ARQUIVO FECHADO.svg'
         "
         alt=""
         class="h-16 w-auto transition-opacity duration-150"

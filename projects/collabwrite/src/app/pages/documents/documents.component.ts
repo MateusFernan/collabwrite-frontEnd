@@ -30,6 +30,7 @@ export class DocumentsComponent implements OnInit {
     createdAt: '',
     updatedAt: '',
     visibility: 'PRIVATE',
+    src: 'assets/CRIAR.svg',
   };
   textoParaPesquisar: string = '';
   constructor(
