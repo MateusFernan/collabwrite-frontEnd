@@ -1,21 +1,35 @@
 <section class="p-6 max-w-[80%] flex flex-col gap-20">
   <app-search [arquivos]="arquivosPublicos"></app-search>
+
   <div class="flex flex-wrap items-center gap-20 pl-2">
     <div
       *ngFor="let arquivo of arquivosFiltrados; index as i"
-      class="flex flex-col gap-5 w-32 items-center hover:cursor-pointer"
+      class="group flex flex-col gap-4 w-32 items-center hover:cursor-pointer"
       (mouseenter)="hover = i"
       (mouseleave)="hover = null"
     >
+      <div class="h-0 w-full overflow-visible flex items-center justify-center">
+        <span
+          class="inline-block -translate-y-4 text-[10px] tracking-wide text-gray-700/90 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+          [title]="arquivo.author?.name || ''"
+        >
+          {{ arquivo.author?.name }}
+        </span>
+      </div>
+
       <img
         (click)="abrirArquivo(arquivo.id)"
         [src]="
           hover === i ? 'assets/BIBLIOTECA.svg' : 'assets/ARQUIVO FECHADO.svg'
         "
         alt=""
-        class="h-16 w-auto transition-opacity duration-150"
+        class="h-16 w-auto transition-transform duration-150 group-hover:scale-[1.03]"
       />
-      <span class="text-base">
+
+      <span
+        class="text-base text-center w-full truncate"
+        [title]="arquivo.title"
+      >
         {{ arquivo.title }}
       </span>
     </div>

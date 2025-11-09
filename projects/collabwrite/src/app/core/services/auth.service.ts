@@ -62,12 +62,16 @@ export class AuthService {
   }
 
   register(name: string, email: string, password: string) {
-    console.log(name, email, password);
-    return this._http.post<User>(`${this._api}/register`, {
-      name,
-      email,
-      password,
-    });
+    return this._http
+      .post<{
+        token: string;
+        user: User;
+      }>(`${this._api}/register`, {
+        name,
+        email,
+        password,
+      })
+      .pipe(tap(({ token, user }) => this._setSession(token, user)));
   }
   logout(): void {
     this._clearSession();
