@@ -22,6 +22,12 @@
             "browser": "projects/collabwrite/src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "projects/collabwrite/tsconfig.app.json",
+            "fileReplacements": [
+              {
+                "replace": "projects/collabwrite/src/environments/environment.ts",
+                "with": "projects/collabwrite/src/environments/environment.prod.ts"
+              }
+            ],
             "inlineStyleLanguage": "scss",
             "assets": [
               {
