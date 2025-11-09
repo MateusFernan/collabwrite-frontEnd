@@ -3,7 +3,7 @@
   <div class="flex flex-wrap items-center gap-20 pl-2">
     <div
       *ngFor="let arquivo of arquivosFiltrados; index as i"
-      class="flex flex-col gap-5 w-32 items-center hover:cursor-pointer"
+      class="flex group flex-col gap-5 w-32 items-center hover:cursor-pointer"
       (mouseenter)="hover = i"
       (mouseleave)="hover = null"
       (click)="i == 0 ? criarTexto() : null"
@@ -18,7 +18,7 @@
             : 'assets/ARQUIVO FECHADO.svg'
         "
         alt=""
-        class="h-16 w-auto transition-opacity duration-150"
+        class="h-16 w-auto transition-transform duration-150 group-hover:scale-[1.03]"
       />
       <span class="text-base">
         {{ arquivo.title }}
