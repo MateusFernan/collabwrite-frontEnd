@@ -32,7 +32,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   private _quill!: any;
   saved = true;
   private _deltaProps: unknown;
-  initialized = false;
+  private _initialized = false;
   isPublic = false;
 
   private _destroy$ = new Subject<void>();
@@ -68,7 +68,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         if (doc.contentDelta && this._quill) {
           this._quill.setContents(doc.contentDelta);
         }
-        this.initialized = true;
+        this._initialized = true;
       }, 0);
       this.isPublic = doc.visibility === 'PUBLIC';
     });
@@ -132,7 +132,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   onChanged(e: any): void {
-    if (!this.initialized) return;
+    if (!this._initialized) return;
     const delta = this._quill?.getContents();
     const html = e.html || '';
     this._save$.next({ delta, html });
@@ -141,6 +141,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
-    this.initialized = false;
+    this._initialized = false;
   }
 }

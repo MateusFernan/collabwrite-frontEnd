@@ -12,20 +12,20 @@ import { SharedService } from '../../core/services/shared.service';
   `,
 })
 export class ShareRedirectComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private shared = inject(SharedService);
+  private _route = inject(ActivatedRoute);
+  private _router = inject(Router);
+  private _shared = inject(SharedService);
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id')!;
-    this.shared.getSharedDoc(id).subscribe({
+    const id = this._route.snapshot.paramMap.get('id')!;
+    this._shared.getSharedDoc(id).subscribe({
       next: (res) => {
         localStorage.setItem('tempToken', res.tokenTemporario);
-        this.router.navigate(['/editor-colab', res.docId], {
+        this._router.navigate(['/editor-colab', res.docId], {
           replaceUrl: true,
         });
       },
-      error: () => this.router.navigate(['/register']),
+      error: () => this._router.navigate(['/register']),
     });
   }
 }
