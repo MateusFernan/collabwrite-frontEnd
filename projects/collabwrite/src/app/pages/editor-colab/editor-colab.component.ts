@@ -57,7 +57,7 @@ export class EditorColabComponent implements OnInit, OnDestroy {
     this.ydoc = new Y.Doc();
     //this.getById();
     this.provider = new WebsocketProvider(
-      'wss://https://ws-collabwrite-production.up.railway.app',
+      'wss://ws-collabwrite-production.up.railway.app',
       `doc-${this.docId}`,
       this.ydoc,
       { params: { token } }
