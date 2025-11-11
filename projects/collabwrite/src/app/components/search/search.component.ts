@@ -27,7 +27,5 @@ export class SearchComponent {
         .toLowerCase()
         .includes(this.textoParaPesquisar.toLowerCase())
     );
-    console.log(DocumentsService.arquivosFiltrados);
-    // this.enviarArquivos.emit(this.arquivosFiltrados);
   }
 }

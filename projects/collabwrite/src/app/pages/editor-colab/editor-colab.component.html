@@ -1,0 +1,24 @@
+<quill-editor
+  theme="snow"
+  [(ngModel)]="html"
+  [modules]="modules"
+  [styles]="{ height: '500px' }"
+  (onEditorCreated)="onReady($event)"
+  class="bg-white rounded-2xl p-2 w-full"
+  placeholder="Escreva aqui..."
+></quill-editor>
+
+<button
+  type="button"
+  (click)="onSave()"
+  [disabled]="saving || role === 'guest'"
+  class="ml-2 px-2 py-[2px] border border-black bg-[#fff3d9] rounded-md text-[11px] font-semibold transition-all hover:bg-[#ff6e1b] hover:text-white active:translate-y-[1px] active:[box-shadow:none] [box-shadow:2px_2px_0_#000] disabled:opacity-60 disabled:pointer-events-none"
+>
+  {{
+    saving
+      ? "Salvando..."
+      : role === "guest"
+      ? "Apenas o autor pode salvar"
+      : "Salvar"
+  }}
+</button>

@@ -24,6 +24,13 @@
     >
       {{ isPublic ? "PÚBLICO" : "PRIVADO" }}
     </span>
+    <button
+      type="button"
+      (click)="onShare()"
+      class="ml-2 px-2 py-[2px] border border-black bg-[#fff3d9] rounded-md text-[11px] font-semibold transition-all hover:bg-[#ff6e1b] hover:text-white active:translate-y-[1px] active:[box-shadow:none] [box-shadow:2px_2px_0_#000]"
+    >
+      Compartilhar
+    </button>
   </div>
 
   <quill-editor

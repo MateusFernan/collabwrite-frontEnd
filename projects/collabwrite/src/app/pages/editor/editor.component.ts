@@ -50,7 +50,11 @@ export class EditorComponent implements OnInit, OnDestroy {
     ],
   };
 
-  constructor(private _route: ActivatedRoute, private _docs: DocumentsService) {}
+  constructor(
+    private _route: ActivatedRoute,
+    private _docs: DocumentsService,
+    private _router: Router
+  ) {}
 
   ngOnInit(): void {
     this._updateVisibility();
@@ -82,6 +86,19 @@ export class EditorComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(() => (this.saved = true));
+  }
+
+  onShare() {
+    this._docs.generateShareLink(this._docId).subscribe({
+      next: (res) => {
+        navigator.clipboard.writeText(res.link);
+        alert('🔗 Link copiado para a área de transferência!');
+        this._router.navigate(['/editor-colab', this._docId], {
+          replaceUrl: true,
+        });
+      },
+      error: () => alert('Erro ao gerar link de compartilhamento.'),
+    });
   }
 
   private _updateContent(): void {

@@ -51,6 +51,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'editor-colab/:id',
+        loadComponent: () =>
+          import('./pages/editor-colab/editor-colab.component').then(
+            (m) => m.EditorColabComponent
+          ),
+      },
+      {
         path: 'read/:id',
         loadComponent: () =>
           import('./pages/text-reader/text-reader.component').then(
@@ -62,6 +69,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/explore/explore.component').then(
             (m) => m.ExploreComponent
+          ),
+      },
+      {
+        path: 'editor-colab',
+        loadComponent: () =>
+          import('./pages/editor-colab/editor-colab.component').then(
+            (m) => m.EditorColabComponent
+          ),
+      },
+      {
+        path: 'share/:id',
+        loadComponent: () =>
+          import('./pages/shared-redirect/shared-redirect.component').then(
+            (m) => m.ShareRedirectComponent
           ),
       },
     ],

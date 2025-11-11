@@ -28,9 +28,13 @@
     "ngx-quill": "^26.0.10",
     "ngx-typed-js": "^2.1.1",
     "quill": "^2.0.3",
+    "quill-cursors": "^4.0.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "typed.js": "^2.1.0",
+    "y-quill": "^1.0.0",
+    "y-websocket": "^3.0.0",
+    "yjs": "^13.6.27",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

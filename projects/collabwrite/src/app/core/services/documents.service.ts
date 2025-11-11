@@ -16,6 +16,10 @@ export class DocumentsService {
     return this._http.get<DocumentDto>(`${this._base}/${id}`);
   }
 
+  getSharedDoc(id: string): Observable<any> {
+    return this._http.get<any>(`${this._base}/${id}`);
+  }
+
   getFiles(): Observable<DocumentDto[]> {
     return this._http.get<DocumentDto[]>(`${this._base}/mine`);
   }
@@ -26,6 +30,10 @@ export class DocumentsService {
 
   getPublicFiles(): Observable<DocumentDto[]> {
     return this._http.get<DocumentDto[]>(`${this._base}/public`);
+  }
+
+  generateShareLink(id: number) {
+    return this._http.post<any>(`${this._base}/${id}/share/`, {});
   }
 
   create(payload: {

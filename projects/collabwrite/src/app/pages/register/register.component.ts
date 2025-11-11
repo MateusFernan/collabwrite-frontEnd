@@ -73,7 +73,6 @@ export class RegisterComponent {
           this.form.reset();
         },
         complete: () => {
-          console.log('aqui');
           this.loading = false;
           this._router.navigate(['/documents']);
         },
