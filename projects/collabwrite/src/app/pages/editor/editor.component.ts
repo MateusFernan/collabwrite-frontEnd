@@ -1,22 +1,23 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+﻿import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import { QuillModule } from 'ngx-quill';
 import { DocumentsService } from '../../core/services/documents.service';
 import {
   Subject,
-  debounceTime,
-  map,
-  distinctUntilChanged,
-  takeUntil,
-  switchMap,
-  tap,
   catchError,
+  debounceTime,
+  distinctUntilChanged,
+  map,
   of,
-  skip,
+  switchMap,
+  takeUntil,
+  tap,
 } from 'rxjs';
 import { DocumentDto } from '../../models/documents.dto';
+import { DialogComponent } from '../../components/dialog/dialog.component';
 
 @Component({
   selector: 'app-editor',
@@ -26,19 +27,8 @@ import { DocumentDto } from '../../models/documents.dto';
   styleUrl: './editor.component.scss',
 })
 export class EditorComponent implements OnInit, OnDestroy {
-  private _docId!: number;
-  title: string = '';
   html = '';
-  private _quill!: any;
-  saved = true;
-  private _deltaProps: unknown;
-  private _initialized = false;
   isPublic = false;
-
-  private _destroy$ = new Subject<void>();
-  private _save$ = new Subject<{ delta: unknown; html: string }>();
-  private _visibilitySave$ = new Subject<'PUBLIC' | 'PRIVATE'>();
-
   modules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
@@ -49,12 +39,44 @@ export class EditorComponent implements OnInit, OnDestroy {
       ['clean'],
     ],
   };
+  saved = true;
+  title: string = '';
+
+  private _destroy$ = new Subject<void>();
+  private _docId!: number;
+  private _initialized = false;
+  private _quill!: any;
+  private _save$ = new Subject<{ delta: unknown; html: string }>();
+  private _visibilitySave$ = new Subject<'PUBLIC' | 'PRIVATE'>();
 
   constructor(
     private _route: ActivatedRoute,
     private _docs: DocumentsService,
-    private _router: Router
+    private _router: Router,
+    private _dialog: Dialog
   ) {}
+
+  abrirModal(): void {
+    let dialogRef = this._dialog.open<string>(DialogComponent, {
+      hasBackdrop: true,
+      panelClass: 'cw-dialog-panel',
+      backdropClass: 'cw-backdrop',
+      data: {
+        defaultTitle: '',
+        label: 'Compartilhando arquivo...',
+        animation: true,
+      },
+    });
+    setTimeout(() => {
+      this.onShare(dialogRef);
+    }, 3500);
+  }
+
+  ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+    this._initialized = false;
+  }
 
   ngOnInit(): void {
     this._updateVisibility();
@@ -63,7 +85,6 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._docs.getById(this._docId).subscribe((doc: DocumentDto) => {
       this.html = doc.contentHtml ?? '';
       this.title = doc.title;
-      this._deltaProps = doc.contentDelta;
       setTimeout(() => {
         if (doc.contentDelta && this._quill) {
           this._quill.setContents(doc.contentDelta);
@@ -74,31 +95,35 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _updateVisibility(): void {
-    this._visibilitySave$
-      .pipe(
-        debounceTime(300),
-        tap(() => (this.saved = false)),
-        switchMap((v) =>
-          this._docs
-            .updateDocument(this._docId, { visibility: v })
-            .pipe(catchError(() => of(null)))
-        )
-      )
-      .subscribe(() => (this.saved = true));
+  onChanged(e: any): void {
+    if (!this._initialized) return;
+    const delta = this._quill?.getContents();
+    const html = e.html || '';
+    this._save$.next({ delta, html });
   }
 
-  onShare() {
+  onReady(q: any): void {
+    this._quill = q;
+  }
+
+  onShare(dialogRef: DialogRef<string, unknown>): void {
+    dialogRef.close();
     this._docs.generateShareLink(this._docId).subscribe({
       next: (res) => {
         navigator.clipboard.writeText(res.link);
-        alert('🔗 Link copiado para a área de transferência!');
+        alert('Link copiado para a area de transferencias!');
         this._router.navigate(['/editor-colab', this._docId], {
           replaceUrl: true,
         });
       },
       error: () => alert('Erro ao gerar link de compartilhamento.'),
     });
+  }
+
+  toggleVisibility(): void {
+    this.isPublic = !this.isPublic;
+    const v = this.isPublic ? 'PUBLIC' : 'PRIVATE';
+    this._visibilitySave$.next(v);
   }
 
   private _updateContent(): void {
@@ -121,26 +146,17 @@ export class EditorComponent implements OnInit, OnDestroy {
       });
   }
 
-  onReady(q: any): void {
-    this._quill = q;
-  }
-
-  toggleVisibility(): void {
-    this.isPublic = !this.isPublic;
-    const v = this.isPublic ? 'PUBLIC' : 'PRIVATE';
-    this._visibilitySave$.next(v);
-  }
-
-  onChanged(e: any): void {
-    if (!this._initialized) return;
-    const delta = this._quill?.getContents();
-    const html = e.html || '';
-    this._save$.next({ delta, html });
-  }
-
-  ngOnDestroy(): void {
-    this._destroy$.next();
-    this._destroy$.complete();
-    this._initialized = false;
+  private _updateVisibility(): void {
+    this._visibilitySave$
+      .pipe(
+        debounceTime(300),
+        tap(() => (this.saved = false)),
+        switchMap((v) =>
+          this._docs
+            .updateDocument(this._docId, { visibility: v })
+            .pipe(catchError(() => of(null)))
+        )
+      )
+      .subscribe(() => (this.saved = true));
   }
 }

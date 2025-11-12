@@ -17,17 +17,20 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-  login = false;
-  loading = false;
-  successMessage = '';
   errorMessage = '';
   form: FormGroup;
+  loading = false;
+  login = false;
+  successMessage = '';
 
-  constructor(
-    private _fb: FormBuilder,
-    private _auth: AuthService,
-    private _router: Router
-  ) {
+  private _auth: AuthService;
+  private _fb: FormBuilder;
+  private _router: Router;
+
+  constructor(fb: FormBuilder, auth: AuthService, router: Router) {
+    this._fb = fb;
+    this._auth = auth;
+    this._router = router;
     this.form = this._fb.group({
       name: this._fb.nonNullable.control(
         '',

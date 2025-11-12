@@ -13,18 +13,18 @@ import { CommonModule } from '@angular/common';
   styleUrl: './explore.component.scss',
 })
 export class ExploreComponent implements OnInit {
-  constructor(
-    private _documentService: DocumentsService,
-    private _router: Router
-  ) {}
   arquivosPublicos: DocumentDto[] = [];
   hover: number | null = null;
 
-  ngOnInit(): void {
-    this._documentService.getPublicFiles().subscribe((response) => {
-      DocumentsService.arquivosFiltrados = response;
-      this.arquivosPublicos = response;
-    });
+  private _documentService: DocumentsService;
+  private _router: Router;
+
+  constructor(
+    documentService: DocumentsService,
+    router: Router
+  ) {
+    this._documentService = documentService;
+    this._router = router;
   }
 
   abrirArquivo(id: number): void {
@@ -33,5 +33,12 @@ export class ExploreComponent implements OnInit {
 
   get arquivosFiltrados(): DocumentDto[] {
     return DocumentsService.arquivosFiltrados;
+  }
+
+  ngOnInit(): void {
+    this._documentService.getPublicFiles().subscribe((response) => {
+      DocumentsService.arquivosFiltrados = response;
+      this.arquivosPublicos = response;
+    });
   }
 }

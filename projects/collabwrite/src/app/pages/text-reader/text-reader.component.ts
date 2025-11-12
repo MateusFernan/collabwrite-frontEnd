@@ -13,13 +13,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './text-reader.component.scss',
 })
 export class TextReaderComponent implements OnInit {
-  private _docId!: number;
-  title: string = '';
   html = '';
-  constructor(
-    private _documentService: DocumentsService,
-    private _route: ActivatedRoute
-  ) {}
+  title: string = '';
+
+  private _docId!: number;
+  private _documentService: DocumentsService;
+  private _route: ActivatedRoute;
+
+  constructor(documentService: DocumentsService, route: ActivatedRoute) {
+    this._documentService = documentService;
+    this._route = route;
+  }
 
   ngOnInit(): void {
     this._docId = Number(this._route.snapshot.paramMap.get('id'));

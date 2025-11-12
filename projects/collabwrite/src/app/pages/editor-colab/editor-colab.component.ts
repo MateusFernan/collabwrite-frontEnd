@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 import { QuillBinding } from 'y-quill';
@@ -7,13 +7,12 @@ import { ActivatedRoute } from '@angular/router';
 import { QuillModule } from 'ngx-quill';
 import { DocumentsService } from '../../core/services/documents.service';
 import {
+  Subject,
   catchError,
   debounceTime,
   distinctUntilChanged,
-  finalize,
   map,
   of,
-  Subject,
   switchMap,
   takeUntil,
   tap,
@@ -32,21 +31,7 @@ Quill.register('modules/cursors', QuillCursors);
   styleUrls: ['./editor-colab.component.scss'],
 })
 export class EditorColabComponent implements OnInit, OnDestroy {
-  private _auth = inject(AuthService);
-  private _route = inject(ActivatedRoute);
-  private _documentService = inject(DocumentsService);
-  private _editor!: any;
   html = '';
-  private _save$ = new Subject<{ delta: unknown; html: string }>();
-  private _destroy$ = new Subject<void>();
-
-  private _saving = false;
-  saved = true;
-  private _ydoc!: Y.Doc;
-  private _provider!: WebsocketProvider;
-  private _binding!: QuillBinding;
-  private _role: 'user' | 'guest' = 'guest';
-  private _docId!: string;
   modules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
@@ -58,10 +43,31 @@ export class EditorColabComponent implements OnInit, OnDestroy {
     ],
     cursors: true,
   };
-  private _initialized = false;
+  saved = true;
   title: string = '';
 
-  ngOnInit() {
+  private _auth = inject(AuthService);
+  private _binding!: QuillBinding;
+  private _destroy$ = new Subject<void>();
+  private _docId!: string;
+  private _documentService = inject(DocumentsService);
+  private _editor!: any;
+  private _initialized = false;
+  private _provider!: WebsocketProvider;
+  private _role: 'user' | 'guest' = 'guest';
+  private _route = inject(ActivatedRoute);
+  private _save$ = new Subject<{ delta: unknown; html: string }>();
+  private _saving = false;
+  private _ydoc!: Y.Doc;
+
+  ngOnDestroy(): void {
+    this._binding?.destroy();
+    this._provider?.destroy();
+    this._ydoc?.destroy();
+    localStorage.removeItem('tempToken');
+  }
+
+  ngOnInit(): void {
     this._updateContent();
     const tempToken = localStorage.getItem('tempToken');
     const token: any = tempToken || this._auth.getToken();
@@ -82,6 +88,22 @@ export class EditorColabComponent implements OnInit, OnDestroy {
     this._initialized = true;
   }
 
+  onChanged(e: any): void {
+    if (!this._initialized) return;
+    const delta = this._editor?.getContents();
+    const html = e.html || '';
+    this._save$.next({ delta, html });
+  }
+
+  onReady(editor: any): void {
+    this._editor = editor;
+    const ytext = this._ydoc.getText('quill');
+    this._binding = new QuillBinding(ytext, editor, this._provider.awareness);
+    this._provider.on('status', (event: any) =>
+      console.log('Colab status', event.status)
+    );
+  }
+
   private _getById(): void {
     this._documentService
       .getById(Number(this._docId))
@@ -100,9 +122,9 @@ export class EditorColabComponent implements OnInit, OnDestroy {
     this._save$
       .pipe(
         debounceTime(700),
-        map((p) => JSON.stringify(p)),
+        map((payload) => JSON.stringify(payload)),
         distinctUntilChanged(),
-        map((s) => JSON.parse(s) as { delta: unknown; html: string }),
+        map((serialized) => JSON.parse(serialized) as { delta: unknown; html: string }),
         tap(() => (this.saved = false)),
         switchMap(({ delta, html }) =>
           this._documentService
@@ -114,26 +136,5 @@ export class EditorColabComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.saved = true;
       });
-  }
-
-  onReady(editor: any) {
-    this._editor = editor;
-    const ytext = this._ydoc.getText('quill');
-    this._binding = new QuillBinding(ytext, editor, this._provider.awareness);
-    this._provider.on('status', (e: any) => console.log('🔌', e.status));
-  }
-
-  onChanged(e: any): void {
-    if (!this._initialized) return;
-    const delta = this._editor?.getContents();
-    const html = e.html || '';
-    this._save$.next({ delta, html });
-  }
-
-  ngOnDestroy() {
-    this._binding?.destroy();
-    this._provider?.destroy();
-    this._ydoc?.destroy();
-    localStorage.removeItem('tempToken');
   }
 }

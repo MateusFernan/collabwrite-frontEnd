@@ -22,8 +22,6 @@ import { SearchComponent } from '../../components/search/search.component';
   styleUrl: './documents.component.scss',
 })
 export class DocumentsComponent implements OnInit {
-  hover: number | null = null;
-  arquivos: DocumentDto[] = [];
   arquivoPrincipal: DocumentDto = {
     title: 'Criar arquivo',
     id: -1,
@@ -32,18 +30,30 @@ export class DocumentsComponent implements OnInit {
     visibility: 'PRIVATE',
     src: 'assets/CRIAR.svg',
   };
+  arquivos: DocumentDto[] = [];
+  hover: number | null = null;
   textoParaPesquisar: string = '';
-  constructor(
-    private _router: Router,
-    private _dialog: Dialog,
-    private _documentService: DocumentsService
-  ) {}
 
-  ngOnInit(): void {
-    this._documentService.getFiles().subscribe((response) => {
-      DocumentsService.arquivosFiltrados = [this.arquivoPrincipal, ...response];
-      this.arquivos = [this.arquivoPrincipal, ...response];
-    });
+  private _dialog: Dialog;
+  private _documentService: DocumentsService;
+  private _router: Router;
+
+  constructor(
+    dialog: Dialog,
+    documentService: DocumentsService,
+    router: Router
+  ) {
+    this._dialog = dialog;
+    this._documentService = documentService;
+    this._router = router;
+  }
+
+  abrirArquivo(id: number): void {
+    this._router.navigate([`/editor/${id}`]);
+  }
+
+  get arquivosFiltrados(): DocumentDto[] {
+    return DocumentsService.arquivosFiltrados;
   }
 
   criarTexto(): void {
@@ -51,7 +61,7 @@ export class DocumentsComponent implements OnInit {
       hasBackdrop: true,
       panelClass: 'cw-dialog-panel',
       backdropClass: 'cw-backdrop',
-      data: { defaultTitle: '' },
+      data: { defaultTitle: '', label: 'nome do arquivo' },
     });
 
     modal.closed.subscribe((title) => {
@@ -61,11 +71,10 @@ export class DocumentsComponent implements OnInit {
     });
   }
 
-  abrirArquivo(id: number): void {
-    this._router.navigate([`/editor/${id}`]);
-  }
-
-  get arquivosFiltrados(): DocumentDto[] {
-    return DocumentsService.arquivosFiltrados;
+  ngOnInit(): void {
+    this._documentService.getFiles().subscribe((response) => {
+      DocumentsService.arquivosFiltrados = [this.arquivoPrincipal, ...response];
+      this.arquivos = [this.arquivoPrincipal, ...response];
+    });
   }
 }

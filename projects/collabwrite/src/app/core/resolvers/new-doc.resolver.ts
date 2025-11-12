@@ -7,6 +7,7 @@ import { DocumentDto } from '../../models/documents.dto';
 @Injectable({ providedIn: 'root' })
 export class NewDocResolver implements Resolve<DocumentDto> {
   constructor(private _docs: DocumentsService) {}
+
   resolve(route: ActivatedRouteSnapshot): Observable<DocumentDto> {
     const title = route.queryParamMap.get('title')?.trim() || 'Sem título';
     return this._docs.create({

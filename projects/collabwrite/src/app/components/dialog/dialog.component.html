@@ -10,8 +10,8 @@
   </div>
 
   <div class="px-7 py-6 font-mono text-black">
-    <h2 class="text-xl font-bold text-center mb-5">Nome do Arquivo:</h2>
-
+    <h2 class="text-xl font-bold text-center mb-5">{{ data.label }}</h2>
+    @if (!data.animation) {
     <input
       class="w-full h-12 bg-[#ffeccd] border-[1.6px] border-black px-3 outline-none"
       [formControl]="title"
@@ -37,5 +37,14 @@
         Cancelar
       </button>
     </div>
+    } @else {
+    <div class="flex items-center justify-center">
+      <app-animation-component
+        [width]="260"
+        [height]="100"
+        [scale]="1.1"
+      ></app-animation-component>
+    </div>
+    }
   </div>
 </div>

@@ -14,8 +14,6 @@ export class AuthService {
   private readonly _api = environment.apiUrl + '/auth';
   private readonly _user = signal<User | null>(null);
 
-  user = this._user.asReadonly();
-
   constructor(private _http: HttpClient) {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
@@ -31,6 +29,10 @@ export class AuthService {
         error: () => this.logout(),
       });
     }
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
   hydrateFromStorage(): void {
@@ -52,6 +54,10 @@ export class AuthService {
     }
   }
 
+  isLoggedIn(): boolean {
+    return !!this._user();
+  }
+
   login(email: string, password: string) {
     return this._http
       .post<{
@@ -59,6 +65,10 @@ export class AuthService {
         user: User;
       }>(`${this._api}/login`, { email, password })
       .pipe(tap(({ token, user }) => this._setSession(token, user)));
+  }
+
+  logout(): void {
+    this._clearSession();
   }
 
   register(name: string, email: string, password: string) {
@@ -73,27 +83,16 @@ export class AuthService {
       })
       .pipe(tap(({ token, user }) => this._setSession(token, user)));
   }
-  logout(): void {
-    this._clearSession();
-  }
 
-  getToken() {
-    return localStorage.getItem('token');
-  }
-
-  isLoggedIn() {
-    return !!this._user();
+  private _clearSession(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this._user.set(null);
   }
 
   private _setSession(token: string, user: User): void {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
     this._user.set(user);
-  }
-
-  private _clearSession(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this._user.set(null);
   }
 }

@@ -16,7 +16,7 @@ export class ShareRedirectComponent implements OnInit {
   private _router = inject(Router);
   private _shared = inject(SharedService);
 
-  ngOnInit() {
+  ngOnInit(): void {
     const id = this._route.snapshot.paramMap.get('id')!;
     this._shared.getSharedDoc(id).subscribe({
       next: (res) => {

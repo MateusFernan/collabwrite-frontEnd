@@ -13,8 +13,8 @@ export interface SharedDocDto {
 
 @Injectable({ providedIn: 'root' })
 export class SharedService {
-  private _http = inject(HttpClient);
   private _api = `${environment.apiUrl}/documents`;
+  private _http = inject(HttpClient);
 
   getSharedDoc(id: string): Observable<SharedDocDto> {
     return this._http.get<SharedDocDto>(`${this._api}/share/${id}`);
