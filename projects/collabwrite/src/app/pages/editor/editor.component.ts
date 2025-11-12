@@ -69,7 +69,7 @@ export class EditorComponent implements OnInit, OnDestroy {
     });
     setTimeout(() => {
       this.onShare(dialogRef);
-    }, 3500);
+    }, 4500);
   }
 
   ngOnDestroy(): void {
