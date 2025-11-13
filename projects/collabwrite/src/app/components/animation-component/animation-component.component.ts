@@ -1,4 +1,13 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
+import type { AnimationItem } from 'lottie-web';
 
 @Component({
   selector: 'app-animation-component',
@@ -19,7 +28,9 @@ import { Component, ElementRef, Input } from '@angular/core';
   `,
   styleUrl: './animation-component.component.scss',
 })
-export class AnimationComponentComponent {
+export class AnimationComponentComponent
+  implements AfterViewInit, OnChanges, OnDestroy
+{
   @Input() autoplay = true;
   @Input() height?: number;
   @Input() loop: boolean | number = true;
@@ -27,7 +38,7 @@ export class AnimationComponentComponent {
   @Input() scale = 1;
   @Input() width?: number;
 
-  private _anim: any;
+  private _anim?: AnimationItem;
   private _el: ElementRef<HTMLElement>;
 
   constructor(el: ElementRef<HTMLElement>) {
@@ -36,8 +47,8 @@ export class AnimationComponentComponent {
 
   async ngAfterViewInit(): Promise<void> {
     const container = this._el.nativeElement.querySelector('.lottie-inner')!;
-
     const lottie = await import('lottie-web');
+
     this._anim = lottie.default.loadAnimation({
       container,
       renderer: 'svg',
@@ -45,6 +56,21 @@ export class AnimationComponentComponent {
       autoplay: this.autoplay,
       path: this.path,
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      !this._anim ||
+      !changes['autoplay'] ||
+      changes['autoplay'].firstChange
+    ) {
+      return;
+    }
+    if (changes['autoplay'].currentValue) {
+      this._anim.play();
+    } else {
+      this._anim.stop();
+    }
   }
 
   ngOnDestroy(): void {
