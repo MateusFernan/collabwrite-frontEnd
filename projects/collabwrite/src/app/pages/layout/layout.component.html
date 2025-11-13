@@ -1,6 +1,6 @@
 <main class="w-full h-full flex flex-row">
   <nav
-    class="flex w-[10%] h-full flex-col border-r-[1.6px] border-black divide-black"
+    class="hidden sm:flex w-[10%] h-full flex-col border-r-[1.6px] border-black divide-black"
   >
     <div class="flex flex-col justify-between my-8 items-center h-full">
       <div class="flex flex-col items-center gap-8 w-full">
@@ -73,8 +73,39 @@
       </div>
     </div>
   </nav>
-
-  <section class="p-6 w-[80%] flex-1 overflow-auto">
+  <section class="p-4 sm:p-6 flex-1 overflow-auto">
+    <nav
+      class="sm:hidden mb-4 flex items-center justify-around border-b border-black pb-2"
+    >
+      <ng-container *ngFor="let img of imagensSidebar">
+        <a
+          *ngIf="img.route; else btnAcaoMobile"
+          [routerLink]="img.route"
+          routerLinkActive
+          [routerLinkActiveOptions]="{ exact: true }"
+          #rlaMobile="routerLinkActive"
+          class="flex flex-col items-center text-[10px] gap-1 px-2"
+        >
+          <img [src]="img.linkSVG" class="w-6 h-auto" />
+          <span
+            class="font-semibold"
+            [class.font-extrabold]="rlaMobile.isActive"
+          >
+            {{ img.labelImagem }}
+          </span>
+        </a>
+        <ng-template #btnAcaoMobile>
+          <button
+            type="button"
+            (click)="img.action?.()"
+            class="flex flex-col items-center text-[10px] gap-1 px-2"
+          >
+            <img [src]="img.linkSVG" class="w-6 h-auto" />
+            <span class="font-semibold">{{ img.labelImagem }}</span>
+          </button>
+        </ng-template>
+      </ng-container>
+    </nav>
     <router-outlet></router-outlet>
   </section>
 </main>

@@ -4,11 +4,17 @@ import { DocumentDto } from '../../models/documents.dto';
 import { SearchComponent } from '../../components/search/search.component';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { GenericDocumentsComponent } from '../../components/generic-documents/generic-documents.component';
 
 @Component({
   selector: 'app-explore',
   standalone: true,
-  imports: [SearchComponent, RouterModule, CommonModule],
+  imports: [
+    SearchComponent,
+    RouterModule,
+    CommonModule,
+    GenericDocumentsComponent,
+  ],
   templateUrl: './explore.component.html',
   styleUrl: './explore.component.scss',
 })
@@ -19,20 +25,13 @@ export class ExploreComponent implements OnInit {
   private _documentService: DocumentsService;
   private _router: Router;
 
-  constructor(
-    documentService: DocumentsService,
-    router: Router
-  ) {
+  constructor(documentService: DocumentsService, router: Router) {
     this._documentService = documentService;
     this._router = router;
   }
 
   abrirArquivo(id: number): void {
     this._router.navigate([`/read/${id}`]);
-  }
-
-  get arquivosFiltrados(): DocumentDto[] {
-    return DocumentsService.arquivosFiltrados;
   }
 
   ngOnInit(): void {
