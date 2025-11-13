@@ -54,10 +54,8 @@ export class EditorColabComponent implements OnInit, OnDestroy {
   private _editor!: any;
   private _initialized = false;
   private _provider!: WebsocketProvider;
-  private _role: 'user' | 'guest' = 'guest';
   private _route = inject(ActivatedRoute);
   private _save$ = new Subject<{ delta: unknown; html: string }>();
-  private _saving = false;
   private _ydoc!: Y.Doc;
 
   ngOnDestroy(): void {
@@ -71,7 +69,6 @@ export class EditorColabComponent implements OnInit, OnDestroy {
     this._updateContent();
     const tempToken = localStorage.getItem('tempToken');
     const token: any = tempToken || this._auth.getToken();
-    this._role = tempToken ? 'guest' : 'user';
     console.log(
       JSON.parse(JSON.stringify(this._route.snapshot.paramMap.get('id')))
     );
@@ -124,7 +121,10 @@ export class EditorColabComponent implements OnInit, OnDestroy {
         debounceTime(700),
         map((payload) => JSON.stringify(payload)),
         distinctUntilChanged(),
-        map((serialized) => JSON.parse(serialized) as { delta: unknown; html: string }),
+        map(
+          (serialized) =>
+            JSON.parse(serialized) as { delta: unknown; html: string }
+        ),
         tap(() => (this.saved = false)),
         switchMap(({ delta, html }) =>
           this._documentService

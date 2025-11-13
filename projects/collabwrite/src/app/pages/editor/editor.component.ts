@@ -67,9 +67,9 @@ export class EditorComponent implements OnInit, OnDestroy {
         animation: true,
       },
     });
-    // setTimeout(() => {
-    //   this.onShare(dialogRef);
-    // }, 5000);
+    setTimeout(() => {
+      this.onShare(dialogRef);
+    }, 5000);
   }
 
   ngOnDestroy(): void {
