@@ -5,7 +5,6 @@ import { NewDocResolver } from './core/resolvers/new-doc.resolver';
 import { logoutResolver } from './core/resolvers/logout.resolver';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'documents', pathMatch: 'full' },
   {
     path: 'register',
     loadComponent: () =>
