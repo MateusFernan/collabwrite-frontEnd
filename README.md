@@ -1,27 +1,105 @@
-# CollabwriteFrontend
+#  CollabWrite — Frontend (Angular)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.3.
+O **CollabWrite** é uma plataforma leve de **escrita, edição e compartilhamento de textos** em tempo real.  
+O objetivo é permitir que usuários criem documentos, colaborem ao vivo e controlem quem pode ver ou editar cada texto.
 
-## Development server
+Este repositório contém o **frontend** da aplicação, desenvolvido com **Angular**, **Signals**, **TailwindCSS**, **Quill**, **RxJS** e **Y.js**.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## Funcionalidades Principais
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Autenticação & Sessão
 
-## Build
+- Login, registro e sessão persistente via **JWT**
+- Armazenamento de `token` + `user` no `localStorage`
+- `AuthGuard` protegendo rotas privadas
+- `AuthInterceptor` adiciona o token automaticamente nas requisições
+- Restauração automática da sessão via `/auth/me`
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Editor de Texto (Quill)
 
-## Running unit tests
+- Editor rico baseado em **ngx-quill**
+- Armazena conteúdo como **Delta + HTML**
+- **Autosave com debounce** para evitar perda de conteúdo
+- Suporte a múltiplos usuários editando o mesmo documento
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Colaboração em Tempo Real (Yjs)
 
-## Running end-to-end tests
+- Sincronização usando **Y.Doc + Y.Text + y-websocket**
+- Cada documento é uma *sala* única no servidor WebSocket
+- Atualizações instantâneas entre usuários conectados
+- Suporte a cursores remotos
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Documentos
 
-## Further help
+- Criar, editar, excluir e listar documentos
+- Sistema de visibilidade:
+  - **PRIVATE** – somente o autor
+  - **SHARED** – compartilhado com usuários específicos
+  - **PUBLIC** – aparece na aba “Explorar”
+- Compartilhamento via link direto
+- Página **Explorar** para visualizar documentos públicos
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+###  UI/UX
+
+- Estilização com **TailwindCSS**
+- Layout **totalmente responsivo**
+- Componentes standalone
+- Uso opcional de **Lottie Animation** na landing (somente desktop)
+
+---
+
+## Arquitetura Técnica
+
+###  Tecnologias Utilizadas
+
+| Tecnologia            | Uso                         |
+|----------------------|------------------------------|
+| **Angular 18+**      | Framework principal          |
+| **Signals**          | Estado reativo interno       |
+| **RxJS**             | Streams, debounce, autosave  |
+| **TailwindCSS**      | Estilização responsiva       |
+| **Quill / ngx-quill**| Editor de texto              |
+| **Y.js + y-websocket** | Colaboração em tempo real |
+| **HttpClient**       | Comunicação com API          |
+| **Standalone Components** | Modularidade e performance |
+
+---
+
+##  Estrutura de Pastas (simplificada)
+
+```bash
+src/
+ ├── app/
+ │    ├── components/
+ │    │     ├── animation-component/
+ │    │     ├── dialog/
+ │    │     ├── generic-documents/
+ │    │     ├── landing-page/
+ │    │     └── search/
+ │    │
+ │    ├── core/
+ │    │     ├── guards/
+ │    │     ├── resolvers/
+ │    │     ├── services/
+ │    │     └── models/
+ │    │
+ │    ├── pages/
+ │    │     ├── documents/
+ │    │     ├── editor/
+ │    │     ├── editor-colab/
+ │    │     ├── explore/
+ │    │     ├── layout/
+ │    │     ├── register/
+ │    │     ├── shared-redirect/
+ │    │     ├── text-reader/
+ │    ├── app.component.html
+ │    ├── app.component.scss
+ │    ├── app.component.ts
+ │    ├── app.component.spec.ts
+ │    ├── app.config.server.ts
+ │    ├── app.config.ts
+ │    ├── app.routes.ts
+ │
+ └── assets/
