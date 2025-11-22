@@ -9,6 +9,17 @@ on:
 jobs:
   continuos-integration:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432/tcp
+
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4
@@ -22,7 +33,10 @@ jobs:
         run: npm install
 
       - name: Rodar Testes Unitários
-        run: npm run test
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
 
       - name: Construir Aplicação Angular
         run: npm run build
+
+      - name: Rodar Testes de Integração
+        run: npm run test:integration
