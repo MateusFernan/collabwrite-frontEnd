@@ -31,8 +31,6 @@ describe('AuthService', () => {
     return TestBed.inject(AuthService);
   }
 
-  const api = environment.apiUrl + '/auth';
-
   it('deve começar deslogado quando não há token nem user nos storage', () => {
     const service = createService();
 
