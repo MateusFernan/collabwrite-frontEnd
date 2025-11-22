@@ -33,7 +33,6 @@ describe('AuthService', () => {
 
   it('deve começar deslogado quando não há token nem user nos storage', () => {
     const service = createService();
-
     expect(service.isLoggedIn()).toBeFalse();
   });
 
