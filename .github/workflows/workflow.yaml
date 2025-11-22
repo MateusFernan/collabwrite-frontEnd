@@ -1,8 +1,10 @@
 name: Continuos Integration
 
 on:
-  [pull_request, push]:
-    branches: ["main"]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   continuos-integration:
@@ -16,7 +18,7 @@ jobs:
         with:
           node-version: "18.x"
 
-      - name:
+      - name: Instalar dependências
         run: npm install
 
       - name: Rodar Testes Unitários
