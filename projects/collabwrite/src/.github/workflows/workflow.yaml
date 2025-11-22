@@ -1,0 +1,23 @@
+name: Continuos Integration
+
+on:
+  [pull_request, push]:
+    branches: ["main"]
+
+jobs:
+  continuos-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+        with:
+          node-version: "18.x"
+
+      - name:
+        run: npm install
+
+      - name: Rodar Testes Unitários
+        run: npm run test
+
+      - name: Construir Aplicação Angular
+        run: npm run build
