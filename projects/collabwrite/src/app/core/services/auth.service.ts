@@ -41,6 +41,7 @@ export class AuthService {
 
     if (savedToken && savedUser) {
       this._user.set(JSON.parse(savedUser));
+
       return;
     }
     if (savedToken) {
